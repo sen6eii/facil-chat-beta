@@ -11,6 +11,9 @@ module.exports = {
         'facil-verde': '#25D366',
         'facil-blanco': '#FFFFFF',
         'facil-gris': '#F0F0F0',
+        border: "hsl(var(--border))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
       },
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif'],
