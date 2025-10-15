@@ -1,0 +1,333 @@
+[
+  {
+    "id": 1,
+    "title": "Project Setup and Authentication Infrastructure",
+    "status": "pending",
+    "details": "Initialize Next.js project with TypeScript and configure Supabase client. Set up Google OAuth through Supabase Auth with proper redirect handling. Create the basic folder structure organized by features (auth, dashboard, clients, messages, etc.). Implement the landing page with Spanish UI, Poppins font, and the specified color palette (verde #25D366, blanco #FFFFFF, gris claro #F0F0F0). Create protected route middleware and user session management. Set up environment variables for Supabase keys and establish the single 'Administrador del negocio' role system.",
+    "priority": "high",
+    "subtasks": [
+      {
+        "id": 1,
+        "title": "Initialize Next.js Project with TypeScript and Basic Configuration",
+        "status": "pending",
+        "details": "Run 'npx create-next-app@latest --typescript --tailwind --eslint --app' to create the project. Install additional dependencies: @supabase/supabase-js, @supabase/auth-helpers-nextjs, @next/font for Poppins font integration. Configure next.config.js for proper image domains and redirects. Set up TypeScript strict mode and configure ESLint rules for the project.",
+        "description": "Create a new Next.js project with TypeScript support and configure the basic project structure with necessary dependencies and configuration files.",
+        "dependencies": [],
+        "testStrategy": "Verify project builds successfully with 'npm run build', check TypeScript compilation without errors, and ensure all dependencies are properly installed"
+      },
+      {
+        "id": 2,
+        "title": "Configure Supabase Client and Environment Variables",
+        "status": "pending",
+        "details": "Create Supabase project and obtain API keys. Set up .env.local with NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. Create lib/supabase.ts with createClientComponentClient and createServerComponentClient configurations. Set up middleware.ts for Supabase auth refresh handling. Configure Supabase Auth settings in the dashboard.",
+        "description": "Set up Supabase integration with proper client configuration and establish secure environment variable management for the project.",
+        "dependencies": [
+          1
+        ],
+        "testStrategy": "Test Supabase client connection, verify environment variables are loaded correctly, and ensure auth refresh middleware works properly"
+      },
+      {
+        "id": 3,
+        "title": "Implement Google OAuth Authentication with Supabase Auth",
+        "status": "pending",
+        "details": "Configure Google OAuth in Supabase Auth dashboard with proper redirect URLs. Create auth components: SignInButton, SignOutButton, and AuthProvider context. Implement signIn and signOut functions using Supabase auth.signInWithOAuth for Google provider. Set up proper redirect handling for post-authentication flows. Configure user role assignment to 'Administrador del negocio' in Supabase RLS policies.",
+        "description": "Configure Google Sign-In through Supabase Auth with proper OAuth flow, redirect handling, and session management for the single 'Administrador del negocio' role.",
+        "dependencies": [
+          2
+        ],
+        "testStrategy": "Test complete Google Sign-In flow end-to-end, verify proper session creation and persistence, validate redirect handling after authentication, and confirm user role assignment"
+      },
+      {
+        "id": 4,
+        "title": "Create Protected Route Middleware and Session Management",
+        "status": "pending",
+        "details": "Create middleware.ts to intercept requests and validate user sessions. Implement route protection logic that redirects unauthenticated users to sign-in page. Create useAuth hook for client-side session management. Set up AuthProvider wrapper component for app-wide authentication state. Implement session refresh logic and proper error handling for expired sessions.",
+        "description": "Implement authentication middleware to protect routes and establish comprehensive user session management throughout the application.",
+        "dependencies": [
+          3
+        ],
+        "testStrategy": "Verify protected routes redirect unauthenticated users properly, test session persistence across page refreshes, validate middleware correctly identifies authenticated vs unauthenticated requests"
+      },
+      {
+        "id": 5,
+        "title": "Establish Project Structure and Landing Page with Spanish UI",
+        "status": "pending",
+        "details": "Create feature-based folder structure: app/(auth), app/(dashboard), app/(clients), app/(messages), components/ui, lib/, types/. Configure Poppins font using @next/font/google. Implement landing page with Spanish content, proper typography, and color scheme (verde #25D366, blanco #FFFFFF, gris claro #F0F0F0). Create reusable UI components following the design system. Set up global CSS with Tailwind custom colors and Spanish language meta tags.",
+        "description": "Create the organized folder structure by features and implement the landing page with Spanish UI, Poppins font, and the specified color palette.",
+        "dependencies": [
+          4
+        ],
+        "testStrategy": "Validate Spanish UI renders correctly with proper fonts and colors, verify folder structure organization, test responsive design on different screen sizes, and ensure proper semantic HTML structure"
+      }
+    ],
+    "description": "Set up the Next.js project with TypeScript, configure Supabase integration, implement Google Sign-In authentication, and establish the basic project structure with Spanish UI components.",
+    "dependencies": [],
+    "testStrategy": "Test Google Sign-In flow end-to-end, verify protected routes redirect properly, validate Spanish UI renders correctly with proper fonts and colors, and ensure environment variables are properly configured."
+  },
+  {
+    "id": 2,
+    "title": "Database Schema and Core Data Models",
+    "status": "pending",
+    "details": "Create Supabase tables: users (with onboarding status), clients (nombre, teléfono +598, estado, timestamps), labels (automatic and manual types), client_labels (many-to-many relationship), messages (incoming/outgoing, timestamps, client association), and faqs (question-answer pairs, fallback/welcome messages). Implement Row Level Security (RLS) policies for data isolation. Set up automatic labels logic for 'Nuevo', 'Respuesta atrasada', 'En curso'. Create database functions for metrics calculations (response rates, active chats, etc.). Establish proper indexes for performance on frequently queried fields like phone numbers and timestamps.",
+    "priority": "high",
+    "subtasks": [
+      {
+        "id": 1,
+        "title": "Create Core Database Tables and Schema Structure",
+        "status": "pending",
+        "details": "Create users table with id, email, onboarding_status, created_at, updated_at. Create clients table with id, nombre, telefono (with +598 validation), estado, created_at, updated_at. Create labels table with id, name, type (automatic/manual), color, created_at. Create messages table with id, content, direction (incoming/outgoing), client_id, created_at, updated_at. Create faqs table with id, question, answer, type (fallback/welcome), is_active, created_at. Use appropriate data types (UUID for IDs, VARCHAR with limits, TIMESTAMP with timezone).",
+        "description": "Design and implement the foundational database tables including users, clients, labels, messages, and faqs with proper column definitions, data types, and basic constraints.",
+        "dependencies": [],
+        "testStrategy": "Verify all tables are created successfully, check column constraints and data types, test basic CRUD operations on each table"
+      },
+      {
+        "id": 2,
+        "title": "Establish Table Relationships and Foreign Key Constraints",
+        "status": "pending",
+        "details": "Add foreign key constraint from messages.client_id to clients.id with CASCADE delete. Create client_labels junction table with client_id and label_id foreign keys for many-to-many relationship. Add proper indexes on foreign key columns. Set up ON DELETE and ON UPDATE behaviors for data consistency. Ensure referential integrity across all table relationships.",
+        "description": "Implement proper relationships between tables including foreign keys, junction tables, and referential integrity constraints.",
+        "dependencies": [
+          1
+        ],
+        "testStrategy": "Test foreign key constraints by attempting to insert invalid references, verify cascade behaviors work correctly, check junction table operations"
+      },
+      {
+        "id": 3,
+        "title": "Implement Row Level Security (RLS) Policies",
+        "status": "pending",
+        "details": "Enable RLS on all tables using ALTER TABLE table_name ENABLE ROW LEVEL SECURITY. Create policies for users to only access their own data. Implement policies for clients, messages, and labels to be accessible only by authenticated users. Set up policies for faqs to be readable by all authenticated users but writable only by admins. Use auth.uid() and auth.role() functions in policy conditions. Create separate policies for SELECT, INSERT, UPDATE, and DELETE operations.",
+        "description": "Set up comprehensive Row Level Security policies to ensure proper data isolation and access control across all tables.",
+        "dependencies": [
+          2
+        ],
+        "testStrategy": "Test policies by creating multiple user accounts and verifying data isolation, attempt unauthorized access to confirm policies block it, validate admin vs regular user permissions"
+      },
+      {
+        "id": 4,
+        "title": "Create Automatic Label Assignment System",
+        "status": "pending",
+        "details": "Create database function to assign 'Nuevo' label when a new client is created. Implement trigger on clients table for new insertions. Create function to assign 'En curso' label when a message is sent/received. Create scheduled function or trigger to assign 'Respuesta atrasada' label based on message timestamps (e.g., no response within 24 hours). Use PostgreSQL triggers (AFTER INSERT, AFTER UPDATE) and stored procedures. Handle label conflicts and priority rules.",
+        "description": "Implement database triggers and functions to automatically assign labels like 'Nuevo', 'Respuesta atrasada', and 'En curso' based on client and message activity.",
+        "dependencies": [
+          3
+        ],
+        "testStrategy": "Test automatic label assignment by creating new clients and sending messages, verify 'Respuesta atrasada' logic with time-based scenarios, check that labels are properly updated and removed"
+      },
+      {
+        "id": 5,
+        "title": "Implement Database Functions and Performance Optimization",
+        "status": "pending",
+        "details": "Create functions for calculating response rates (percentage of messages responded to within timeframe), active chats count (clients with recent message activity), average response time, and client status distribution. Implement functions using PostgreSQL's aggregate functions and window functions. Create indexes on clients.telefono, messages.created_at, messages.client_id, client_labels.client_id, and client_labels.label_id. Add composite indexes for common query patterns. Use EXPLAIN ANALYZE to verify query performance improvements.",
+        "description": "Create database functions for metrics calculations and establish proper indexes for optimal query performance on frequently accessed fields.",
+        "dependencies": [
+          4
+        ],
+        "testStrategy": "Test all metric calculation functions with sample data and verify accuracy, benchmark query performance before and after index creation, validate functions return correct results under various data scenarios"
+      }
+    ],
+    "description": "Design and implement the complete Supabase database schema including users, clients, labels, messages, and FAQs tables with proper relationships and constraints.",
+    "dependencies": [
+      1
+    ],
+    "testStrategy": "Verify all table relationships work correctly, test RLS policies prevent unauthorized access, validate automatic label assignment triggers, and ensure database functions return accurate metrics calculations."
+  },
+  {
+    "id": 3,
+    "title": "WhatsApp Integration and Twilio Webhook System",
+    "status": "pending",
+    "details": "Create `/api/twilio/webhook` endpoint to handle incoming WhatsApp messages via Twilio. Implement message parsing, client auto-creation for new numbers, and storage in the messages table. Build the auto-reply system with FAQ text matching and fallback message handling. Create functions to send outgoing messages through Twilio API. Implement proper E.164 phone number validation for Uruguay (+598). Set up webhook URL generation and display in settings. Add error handling and logging for webhook failures and retry logic for failed message sends.",
+    "priority": "high",
+    "subtasks": [
+      {
+        "id": 1,
+        "title": "Create Twilio Webhook Endpoint and Message Processing",
+        "status": "pending",
+        "details": "Create a POST endpoint at `/api/twilio/webhook` that accepts Twilio webhook requests. Implement Twilio signature verification for security. Parse incoming message data including sender phone number, message body, and metadata. Add request logging and basic error handling. Validate webhook payload structure and return appropriate HTTP status codes.",
+        "description": "Implement the `/api/twilio/webhook` endpoint to receive and process incoming WhatsApp messages from Twilio. Handle message parsing, validation, and basic request processing.",
+        "dependencies": [],
+        "testStrategy": "Use Twilio webhook testing tools and ngrok to simulate incoming messages. Verify signature validation, payload parsing, and proper HTTP responses."
+      },
+      {
+        "id": 2,
+        "title": "Implement Phone Number Validation and Client Auto-Creation",
+        "status": "pending",
+        "details": "Create utility functions for E.164 phone number validation with Uruguay country code (+598) support. Implement client lookup by phone number and auto-creation logic for new numbers. Store client information with phone number, creation timestamp, and WhatsApp-specific metadata. Handle duplicate prevention and data sanitization.",
+        "description": "Add E.164 phone number validation specifically for Uruguay (+598) format and implement automatic client creation for new WhatsApp numbers that send messages.",
+        "dependencies": [
+          1
+        ],
+        "testStrategy": "Test with various Uruguay phone number formats, verify client creation for new numbers, and ensure no duplicates are created for existing clients."
+      },
+      {
+        "id": 3,
+        "title": "Build Message Storage and Database Integration",
+        "status": "pending",
+        "details": "Design message storage schema with fields for message ID, client ID, content, direction (incoming/outgoing), timestamp, Twilio message SID, and status. Implement database insertion functions with proper error handling. Add message retrieval functions for client history. Include message status tracking (delivered, failed, pending).",
+        "description": "Implement message storage functionality to save incoming and outgoing WhatsApp messages to the messages table with proper data structure and relationships.",
+        "dependencies": [
+          2
+        ],
+        "testStrategy": "Verify messages are stored correctly with all required fields, test message retrieval by client, and validate data integrity and relationships."
+      },
+      {
+        "id": 4,
+        "title": "Develop Auto-Reply System with FAQ Matching",
+        "status": "pending",
+        "details": "Implement text matching algorithm for FAQ content using keyword matching or fuzzy string matching. Create FAQ management system with question-answer pairs. Build auto-reply logic that triggers based on message content analysis. Implement fallback messages for unmatched queries. Add configuration options for enabling/disabling auto-replies and customizing response templates.",
+        "description": "Create an intelligent auto-reply system that matches incoming messages against FAQ content and provides appropriate responses with fallback handling.",
+        "dependencies": [
+          3
+        ],
+        "testStrategy": "Test FAQ matching accuracy with various message inputs, verify fallback responses work correctly, and validate auto-reply triggering logic."
+      },
+      {
+        "id": 5,
+        "title": "Implement Outgoing Message API and Error Handling",
+        "status": "pending",
+        "details": "Create Twilio API integration for sending outgoing messages with proper authentication and rate limiting. Implement retry logic for failed message sends with exponential backoff. Add comprehensive error handling and logging for webhook failures. Build webhook URL generation and display functionality in application settings. Include message delivery status tracking and webhook failure notifications.",
+        "description": "Build functions to send outgoing WhatsApp messages through Twilio API, implement comprehensive error handling, retry logic, and webhook URL management in settings.",
+        "dependencies": [
+          4
+        ],
+        "testStrategy": "Test outgoing message sending through Twilio API, verify retry logic works for failed sends, validate error handling and logging, and ensure webhook URL configuration works properly."
+      }
+    ],
+    "description": "Implement Twilio WhatsApp API integration with webhook handling for incoming/outgoing messages, auto-reply system with FAQ matching, and message storage.",
+    "dependencies": [
+      2
+    ],
+    "testStrategy": "Test webhook endpoint receives and processes Twilio messages correctly, verify auto-replies trigger appropriately with FAQ matching, validate outgoing message sending through Twilio API, and ensure proper error handling for webhook failures."
+  },
+  {
+    "id": 4,
+    "title": "Dashboard and Real-time Metrics System",
+    "status": "pending",
+    "details": "Create the main dashboard page with metric cards showing total clients, active chats, 2-hour response rate (last 30 days), messages replied today, new clients this month, and recent activity (last 5 messages). Implement the three-step onboarding component (connect WhatsApp, configure auto-replies, start managing chats) with skip functionality and completion tracking. Set up Supabase Realtime subscriptions for live message updates and dashboard metrics refresh. Create the sidebar navigation for accessing Clientes, Etiquetas, Mensajes, FAQs, and Ajustes sections. Implement proper loading states and error handling for real-time connections.",
+    "priority": "medium",
+    "subtasks": [
+      {
+        "id": 1,
+        "title": "Create Dashboard Layout and Metric Cards",
+        "status": "pending",
+        "details": "Create a responsive dashboard layout using a grid system. Implement individual metric cards with proper styling and loading states. Set up data fetching functions for each metric calculation. Include proper error handling for failed metric calculations and display fallback values.",
+        "description": "Build the main dashboard page structure with metric cards displaying total clients, active chats, 2-hour response rate (last 30 days), messages replied today, new clients this month, and recent activity (last 5 messages).",
+        "dependencies": [],
+        "testStrategy": "Verify all metric cards display correctly with proper formatting, test loading states, and validate metric calculations against database queries"
+      },
+      {
+        "id": 2,
+        "title": "Implement Sidebar Navigation System",
+        "status": "pending",
+        "details": "Build a collapsible sidebar component with navigation items. Implement active route highlighting using router state. Add responsive behavior for mobile devices with hamburger menu. Include proper accessibility attributes and keyboard navigation support.",
+        "description": "Create the sidebar navigation component with links to Clientes, Etiquetas, Mensajes, FAQs, and Ajustes sections, including active state management and responsive behavior.",
+        "dependencies": [],
+        "testStrategy": "Test navigation between all sections, verify active state highlighting works correctly, and validate responsive behavior on different screen sizes"
+      },
+      {
+        "id": 3,
+        "title": "Build Three-Step Onboarding Flow Component",
+        "status": "pending",
+        "details": "Implement a multi-step wizard component with progress indicators. Create individual step components for WhatsApp connection, auto-reply configuration, and chat management setup. Add skip functionality with confirmation dialogs. Implement completion tracking using local storage or user preferences. Include proper validation for each step.",
+        "description": "Create the onboarding component with three steps: connect WhatsApp, configure auto-replies, and start managing chats. Include skip functionality and completion tracking.",
+        "dependencies": [],
+        "testStrategy": "Test complete onboarding flow, verify skip functionality works at each step, validate completion tracking persists across sessions, and ensure proper step validation"
+      },
+      {
+        "id": 4,
+        "title": "Set Up Supabase Realtime Subscriptions",
+        "status": "pending",
+        "details": "Configure Supabase Realtime client with proper authentication. Set up subscriptions for messages table and client activity updates. Implement event handlers for real-time data updates that refresh dashboard metrics. Add connection status monitoring and automatic reconnection logic. Optimize subscription filters to reduce unnecessary updates.",
+        "description": "Implement Supabase Realtime integration for live updates of messages and client activity, ensuring dashboard metrics refresh automatically with sub-second update times.",
+        "dependencies": [
+          1
+        ],
+        "testStrategy": "Verify real-time updates occur within 1 second, test connection stability and reconnection logic, validate that only relevant updates trigger metric refreshes"
+      },
+      {
+        "id": 5,
+        "title": "Implement Loading States and Error Handling",
+        "status": "pending",
+        "details": "Create loading skeleton components for metric cards and dashboard sections. Implement error boundaries for component-level error handling. Add retry mechanisms for failed real-time connections. Create user-friendly error messages and fallback UI states. Implement global error handling for navigation and API failures.",
+        "description": "Add comprehensive loading states for all dashboard components and implement robust error handling for real-time connections, metric calculations, and navigation failures.",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "testStrategy": "Test loading states during slow network conditions, verify error handling for various failure scenarios, validate retry mechanisms work correctly, and ensure graceful degradation when real-time features fail"
+      }
+    ],
+    "description": "Build the main dashboard with real-time metrics, onboarding flow, and Supabase Realtime integration for live updates of messages and client activity.",
+    "dependencies": [
+      3
+    ],
+    "testStrategy": "Verify all dashboard metrics calculate correctly and update in real-time, test onboarding flow completion and skip functionality, validate Realtime subscriptions work properly with < 1 second update times, and ensure navigation between sections works smoothly."
+  },
+  {
+    "id": 5,
+    "title": "Client Management and Settings Interface",
+    "status": "pending",
+    "details": "Build the clients management interface with create/edit/archive/delete functionality, table view with filtering and search by labels. Implement labels CRUD system for both automatic and manual labels with archived labels section. Create the settings page for uploading business logo/name, configuring global Twilio credentials (Account SID, Auth Token, phone number), and displaying/copying webhook URL. Build the messages interface showing unanswered messages and recent activity with 'Responder en WhatsApp' buttons linking to wa.me. Implement the FAQs management system for question-answer pairs with fallback and welcome message configuration. Set up automatic Markdown documentation generation for the `/docs` route covering API routes, database schema, components, environment variables, and deployment guides.",
+    "priority": "medium",
+    "subtasks": [
+      {
+        "id": 1,
+        "title": "Implement Client Management CRUD Interface",
+        "status": "pending",
+        "details": "Create client model with fields for name, contact info, labels, and status. Build React components for client table with sorting, filtering, and search. Implement forms for creating and editing clients with label assignment. Add archive/unarchive functionality and soft delete. Create API endpoints for all CRUD operations with proper validation and error handling.",
+        "description": "Build complete client management system with create, read, update, delete, and archive functionality including table view with filtering and search capabilities by labels.",
+        "dependencies": [],
+        "testStrategy": "Test all CRUD operations, verify table filtering and search work correctly, ensure archive/unarchive functions properly, validate form submissions and error handling"
+      },
+      {
+        "id": 2,
+        "title": "Implement Labels CRUD System",
+        "status": "pending",
+        "details": "Design label model with name, color, type (automatic/manual), and archived status. Build label management interface with create, edit, delete, and archive functionality. Implement automatic label assignment logic based on predefined rules. Create archived labels view for restoration. Add label assignment/removal for clients with proper relationship management.",
+        "description": "Create comprehensive label management system supporting both automatic and manual labels with archived labels section and full CRUD operations.",
+        "dependencies": [],
+        "testStrategy": "Test label creation, editing, deletion, and archiving. Verify automatic label assignment works correctly. Test label-client relationships and bulk operations"
+      },
+      {
+        "id": 3,
+        "title": "Build Business Settings Configuration Page",
+        "status": "pending",
+        "details": "Design settings model for business name, logo URL, Twilio Account SID, Auth Token, and phone number. Build settings form with file upload for logo, secure input fields for Twilio credentials, and read-only webhook URL field with copy button. Implement proper validation, encryption for sensitive data, and settings persistence. Add preview functionality for logo and business name.",
+        "description": "Create settings page for business configuration including logo/name upload, Twilio credentials management, and webhook URL display with copy functionality.",
+        "dependencies": [],
+        "testStrategy": "Test file upload functionality, verify Twilio credentials are saved securely, ensure webhook URL displays correctly and copy function works, validate form submission and data persistence"
+      },
+      {
+        "id": 4,
+        "title": "Create Messages Interface and FAQ Management System",
+        "status": "pending",
+        "details": "Create messages dashboard displaying unanswered messages and recent activity with timestamps. Implement 'Responder en WhatsApp' buttons linking to wa.me with proper phone number formatting. Build FAQ management interface for question-answer pairs with CRUD operations. Add welcome message and fallback message configuration. Integrate with Twilio phone number from settings for WhatsApp links.",
+        "description": "Build messages interface showing unanswered messages and recent activity with WhatsApp integration, plus FAQ management system with fallback and welcome message configuration.",
+        "dependencies": [
+          3
+        ],
+        "testStrategy": "Test message display and filtering, verify WhatsApp links work correctly with proper phone number formatting, test FAQ CRUD operations, validate welcome and fallback message functionality"
+      },
+      {
+        "id": 5,
+        "title": "Implement Automatic Documentation Generation System",
+        "status": "pending",
+        "details": "Create documentation generator that scans codebase for API routes, database models, React components, and environment variables. Build Markdown templates for different documentation sections. Implement /docs route that serves generated documentation with proper formatting and navigation. Add automatic updates when code changes. Include deployment guides, setup instructions, and API endpoint documentation with examples.",
+        "description": "Set up automatic Markdown documentation generation system for the /docs route covering API routes, database schema, components, environment variables, and deployment guides.",
+        "dependencies": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "testStrategy": "Verify documentation generates correctly for all sections, test /docs route accessibility, ensure documentation updates automatically, validate Markdown formatting and completeness of coverage"
+      }
+    ],
+    "description": "Implement complete CRUD operations for clients and labels, settings page for business configuration, and automatic documentation generation system.",
+    "dependencies": [
+      4
+    ],
+    "testStrategy": "Test all CRUD operations for clients and labels work correctly, verify settings page properly saves and displays configuration, validate message interface shows correct data and WhatsApp links work, ensure FAQ system saves and retrieves properly, and confirm documentation generation creates accurate and complete Markdown files."
+  }
+]
